@@ -1,25 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import { StyledApp, StyledBody } from './theme';
+import { Wheel } from './Wheel';
+export const App = () => {
 
-function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <StyledApp >
+      <header>Picker Wheel</header>
 
-export default App;
+      <div>
+        <Wheel />
+        <StyledBody>
+          <h1>How to use</h1>
+          <p>Click the "Spin" button to spin the wheel.</p>
+          <p>The wheel will spin for 2 seconds before stopping.</p>
+          <p>Once the wheel stops, the selected item will be highlighted.</p>
+        </StyledBody>
+      </div>
+    </StyledApp>
+  );
+};
