@@ -1,4 +1,4 @@
-import { StyledDiv, StyledPointer, StyledSpinButton } from "./styled";
+import { StyledDiv, StyledSpinButton } from "./styled";
 
 export const SpinButton = ({ onClick, isSpinning }) => {
   return (

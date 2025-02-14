@@ -4,13 +4,14 @@ export const StyledWheel = styled.div`
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background-color: #f5f5f5;
+  background-color:rgb(18, 18, 18);
   background: conic-gradient(
     #ff0000 0% 25%, 
     #00ff00 25% 50%, 
     #0000ff 50% 75%, 
     #ffff00 75% 100%
   );
+  
   display: flex;
   justify-content: center;
   align-items: center;

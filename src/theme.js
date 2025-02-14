@@ -30,7 +30,8 @@ export const StyledApp = styled.div`  // always npm start
   `;
 export const StyledBody = styled.div`
 
-  display: grid;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   background-color: teal;
   color: white;
