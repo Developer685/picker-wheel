@@ -11,7 +11,8 @@ export const Form = forwardRef((props, ref) => {
   const [options, setOptions] = useState([
     { id: nanoid(), content: "Option 1" },
     { id: nanoid(), content: "Option 2" },
-    { id: nanoid(), content: "Option 3" }
+    { id: nanoid(), content: "Option 3" },
+    { id: nanoid(), content: "Option 4" },
   ]);
 
   const [newOption, setNewOption] = useState("");

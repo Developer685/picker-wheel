@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, WheelContainer, Pointer, ButtonsContainer } from "./styled";
+import { Button, WheelContainer, Pointer, ButtonsContainer, StyledWheel } from "./styled";
 
 export const Wheel = ({ numberOfElements, options }) => {
   const [rotation, setRotation] = useState(0);
@@ -7,19 +7,18 @@ export const Wheel = ({ numberOfElements, options }) => {
   const sectorAngle = 360 / numberOfElements;
 
   const spinWheel = () => {
-    const randomTurns = Math.floor(Math.random() * 5) + 3; 
-    const randomOffset = Math.random() * sectorAngle; 
+    const randomTurns = Math.floor(Math.random() * 5) + 3;
+    const randomOffset = Math.random() * sectorAngle;
     const newRotation = rotation + randomTurns * 360 + randomOffset;
     setRotation(newRotation);
 
-
     setTimeout(() => {
-      const normalizedRotation = (newRotation % 360 + 360) % 360; 
-      const indicatorAngle = 270; 
+      const normalizedRotation = (newRotation % 360 + 360) % 360;
+      const indicatorAngle = 270;
       const effectiveAngle = (360 - normalizedRotation + indicatorAngle) % 360;
       const selectedIndex = Math.floor(effectiveAngle / sectorAngle) % numberOfElements;
       setSelectedOption(options[selectedIndex]?.content || "Brak opcji");
-    }, 3000); 
+    }, 3000);
   };
 
   const resetWheel = () => {
@@ -40,9 +39,9 @@ export const Wheel = ({ numberOfElements, options }) => {
 
   return (
     <WheelContainer >
-      <div style={{ position: "relative", display: "inline-block" }}>
-   
-        <Pointer/>
+      <StyledWheel>
+
+        <Pointer />
         <svg
           width="200"
           height="200"
@@ -80,14 +79,13 @@ export const Wheel = ({ numberOfElements, options }) => {
             );
           })}
         </svg>
-      </div>
+      </StyledWheel>
 
       <ButtonsContainer>
-        <Button spin onClick={spinWheel} >Zakręć kołem</Button>
-        <Button reset onClick={resetWheel}>Resetuj</Button>
-        <p>Wylosowana opcja: {selectedOption}</p>
+        <Button spin onClick={spinWheel} >Spin</Button>
+        <Button reset onClick={resetWheel}>Reset</Button>
+        <p>The drawn option: {selectedOption}</p>
       </ButtonsContainer>
-
     </WheelContainer>
   );
 };

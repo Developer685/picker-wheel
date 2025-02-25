@@ -30,16 +30,13 @@ export const Pointer = styled.div`
   z-index: 1;
 `;
 
-export const SvgWheel = styled.svg`
-  width: 200px;
-  height: 200px;
- 
-  transform: rotate(${({ rotation }) => rotation}deg);
-  transition: transform 3s ease-out;
-`;
-
 export const ButtonsContainer = styled.div`
 
-
 `;
+
+export const StyledWheel = styled.div`
+  position: relative; 
+  display: inline-block;
+`;
+
 
