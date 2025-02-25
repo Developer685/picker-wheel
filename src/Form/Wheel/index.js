@@ -1,59 +1,93 @@
-import { StyledWheel } from "./styled";
 import { useState } from "react";
-import { useEffect, useRef } from "react";
-import { SpinButton } from "./SpinButton";
+import { Button, WheelContainer, Pointer, ButtonsContainer } from "./styled";
 
-export const Wheel = ({ options, newOption }) => {
+export const Wheel = ({ numberOfElements, options }) => {
+  const [rotation, setRotation] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const sectorAngle = 360 / numberOfElements;
 
-  const wheelRef = useRef(null);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [finalRotation, setFinalRotation] = useState(0);
+  const spinWheel = () => {
+    const randomTurns = Math.floor(Math.random() * 5) + 3; 
+    const randomOffset = Math.random() * sectorAngle; 
+    const newRotation = rotation + randomTurns * 360 + randomOffset;
+    setRotation(newRotation);
 
-  const win = () => {
-    setIsSpinning(true);
+
     setTimeout(() => {
-      setFinalRotation(Math.floor(Math.random() * 360));
-      let result = "";
-      if (finalRotation >= 0 && finalRotation < 90) result = "Żółty";
-      else if (finalRotation >= 90 && finalRotation < 180) result = "Niebieski";
-      else if (finalRotation >= 180 && finalRotation < 270) result = "Zielony";
-      else result = "Czerwony";
-      console.log("finalRotation: ", finalRotation);
-      console.log("result: ", result);
-      alert(`Wylosowano: ${result}`);
-      wheelRef.current.style.transform = `rotate(0deg)`;
-      setIsSpinning(false);
-
-    }, 3000); // Adjust the duration as needed
-
-    return finalRotation; // synchronize the rotation state with the wheel's rotation
-  }
-
-  const useSpinning = () => {
-
-    useEffect(() => {
-
-      if (isSpinning && wheelRef.current) { // variables compare to true
-        const newRotation = (parseInt(finalRotation) + 1800);
-        wheelRef.current.style.transition = "transform 3s ease-out";
-        wheelRef.current.style.transform = `rotate(${newRotation}deg)`;
-        setFinalRotation({ newRotation });
-      }
-    });
-    return { isSpinning, wheelRef };
+      const normalizedRotation = (newRotation % 360 + 360) % 360; 
+      const indicatorAngle = 270; 
+      const effectiveAngle = (360 - normalizedRotation + indicatorAngle) % 360;
+      const selectedIndex = Math.floor(effectiveAngle / sectorAngle) % numberOfElements;
+      setSelectedOption(options[selectedIndex]?.content || "Brak opcji");
+    }, 3000); 
   };
-  useSpinning();
+
+  const resetWheel = () => {
+    setRotation(0);
+    setSelectedOption(null);
+  };
+
+  const createCircularSector = (radius, startAngle, endAngle) => {
+    const radians = (angle) => (Math.PI / 180) * angle;
+    const x1 = radius * Math.cos(radians(startAngle));
+    const y1 = radius * Math.sin(radians(startAngle));
+    const x2 = radius * Math.cos(radians(endAngle));
+    const y2 = radius * Math.sin(radians(endAngle));
+
+    return `M 0 0 L ${x1} ${y1} A ${radius} ${radius} 0 ${endAngle - startAngle > 180 ? 1 : 0
+      } 1 ${x2} ${y2} Z`;
+  };
 
   return (
-    <div>
-      <div>
-        ▼
+    <WheelContainer >
+      <div style={{ position: "relative", display: "inline-block" }}>
+   
+        <Pointer/>
+        <svg
+          width="200"
+          height="200"
+          viewBox="-100 -100 200 200"
+          style={{ transform: `rotate(${rotation}deg)`, transition: "transform 3s ease-out" }}
+        >
+          {options.map((option, i) => {
+            const startAngle = sectorAngle * i;
+            const endAngle = startAngle + sectorAngle;
+            const color = i % 2 === 0 ? "#2C3E50" : "#D7BFAE";
+
+            const angle = (startAngle + endAngle) / 2;
+            const radius = 70;
+            const x = radius * Math.cos((angle * Math.PI) / 180);
+            const y = radius * Math.sin((angle * Math.PI) / 180);
+
+            return (
+              <g key={option.id}>
+                <path
+                  d={createCircularSector(100, startAngle, endAngle)}
+                  fill={color}
+                />
+                <text
+                  x={x}
+                  y={y}
+                  fontSize="12"
+                  fill="white"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  transform={`rotate(${angle}, ${x}, ${y})`}
+                >
+                  {option.content}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
-      <StyledWheel ref={wheelRef} options={options} newOption={newOption}>
-        <SpinButton onClick={() => { win() }} disabled={isSpinning}>
-          Spin
-        </SpinButton>
-      </StyledWheel>
-    </div>
+
+      <ButtonsContainer>
+        <Button spin onClick={spinWheel} >Zakręć kołem</Button>
+        <Button reset onClick={resetWheel}>Resetuj</Button>
+        <p>Wylosowana opcja: {selectedOption}</p>
+      </ButtonsContainer>
+
+    </WheelContainer>
   );
 };

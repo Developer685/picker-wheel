@@ -1,22 +1,45 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const StyledWheel = styled.div`
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background-color:rgb(18, 18, 18);
-  background: conic-gradient(
-    #ff0000 0% 25%, 
-    #00ff00 25% 50%, 
-    #0000ff 50% 75%, 
-    #ffff00 75% 100%
-  );
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  color: #333;
-  border: 1px solid #333;
-  margin: auto;
+export const WheelContainer = styled.div`
+  text-align: center;
+  position: relative;
 `;
+
+export const Button = styled.button`
+  ${({ spin }) => spin && css`
+    margin-top: 2px;
+    background-color: ${({ theme }) => theme.color.lightTheme.fieryCoral};
+    `}
+
+  ${({ reset }) => reset && css`
+    background: red;
+
+    `}
+`;
+
+export const Pointer = styled.div`
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid red;
+  z-index: 1;
+`;
+
+export const SvgWheel = styled.svg`
+  width: 200px;
+  height: 200px;
+ 
+  transform: rotate(${({ rotation }) => rotation}deg);
+  transition: transform 3s ease-out;
+`;
+
+export const ButtonsContainer = styled.div`
+
+
+`;
+

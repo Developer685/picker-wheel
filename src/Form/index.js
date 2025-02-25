@@ -1,19 +1,21 @@
-import { StyledForm } from "./styled";
-import { forwardRef, useImperativeHandle, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Wheel } from "./Wheel";
-import { useRef } from "react";
-import { addOption, removeOption } from "../optionSlice";
 import { nanoid } from "@reduxjs/toolkit";
+import { forwardRef, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { addOption, removeOption } from "../optionSlice";
+import { StyledForm } from "./styled";
+import { Wheel } from "./Wheel";
 import { Input } from "./Input/styled";
-import { WheelElement } from "./Wheel/WheelElement";
 
 export const Form = forwardRef((props, ref) => {
 
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([
+    { id: nanoid(), content: "Option 1" },
+    { id: nanoid(), content: "Option 2" },
+    { id: nanoid(), content: "Option 3" }
+  ]);
+
   const [newOption, setNewOption] = useState("");
   const inputRef = useRef(null);
-  const numberOfElements = options.length;
   const dispatch = useDispatch();
 
   const onFormSubmit = (event) => {
@@ -32,15 +34,11 @@ export const Form = forwardRef((props, ref) => {
     inputRef.current.focus();
   };
 
-  useImperativeHandle(ref, () => ({
-    getOptions: () => options,
-  }));
-
   return (
     <StyledForm onSubmit={onFormSubmit}>
       <Wheel
+        numberOfElements={options.length > 0 ? options.length : 1}
         options={options}
-        newOption={newOption}
       />
       <div>
         <Input
@@ -51,21 +49,18 @@ export const Form = forwardRef((props, ref) => {
         />
         <button type="submit">Add</button>
         <ul>
-          {
-            options.map((option) => (
-              <li key={option.id} style={{ listStyle: "none" }}>
-                {option.content}
-                <button onClick={() => {
-                  dispatch(removeOption(option.id));
-                  setOptions(options.filter((opt) => opt.id !== option.id));
-                }}>
-                  Remove
-                </button>
-              </li>
-            ))
-          }
+          {options.map((option) => (
+            <li key={option.id} style={{ listStyle: "none" }}>
+              {option.content}
+              <button onClick={() => {
+                dispatch(removeOption(option.id));
+                setOptions(options.filter((opt) => opt.id !== option.id));
+              }}>
+                Remove
+              </button>
+            </li>
+          ))}
         </ul>
-        <WheelElement numberOfElements={numberOfElements} />
       </div>
     </StyledForm>
   );
